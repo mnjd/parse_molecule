@@ -31,4 +31,4 @@ Some "else" cases need to be considered (as of now, there is a possibility that 
 
 So, the code has to be challenged against more complicated formulas than the 3 listed above.
 
-Fractional multipliers break the code..
+Fractional multipliers break the code.
