@@ -2,9 +2,28 @@ import unittest
 
 water = 'H2O'
 magnesium_hydroxide = 'Mg(OH)2'
-fremy_salt = 'K44[ON(SO3)2]2'
+fremy_salt = 'K4[ON(SO3)2]2'
 
 
+class Parser:
+    
+    def __init__(self):
+        pass
+    
+    def replace_braces(self, mol):
+        '''
+        Replace square and brackets with parenthesis
+        '''
+        mol = mol.replace('[', '(')
+        mol = mol.replace(']', ')')
+        mol = mol.replace('{', '(')
+        mol = mol.replace('}', ')')
+        return mol
+
+#p = Parser()
+#print(p.replace_braces(fremy_salt))
+
+'''
 class MyTest(unittest.TestCase):
     def test_water(self):
         self.assertEqual(parse_molecule('water'), {'H': 2, 'O': 1})
@@ -17,3 +36,4 @@ class MyTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+'''
