@@ -8,7 +8,7 @@ imaginary = 'ON(SO3)2'
 
 
 class Parser:
-    
+
     def __init__(self):
         # result is the dictionary that contains atoms and their counts
         self.result = {}
@@ -20,18 +20,23 @@ class Parser:
         mol = self.replace_braces(mol)
         mol = self.interchange_braces(mol)
         mol = mol[::-1]
-        # make a list with individual elements found in chemical formula: atoms, multipliers, parenthesis
+        # make a list with individual elements found in chemical formula:
+        # atoms, multipliers, parenthesis
         element_molecule = re.findall(r"[a-z]*[A-Z]|['(']|[')']|\d+", mol)
         count = 0
-        # l contains subunits of the molecule that have to be parsed and is used at the begining of the recursion
+        # l contains subunits of the molecule that have to be parsed and
+        # is used at the begining of the recursion
         l = []
         while count < len(element_molecule):
-            # check the type of element in element_molecule list: number(s), letter(s)
+            # check the type of element in element_molecule list:
+            # number(s), letter(s)
             if element_molecule[count].isdecimal():
-                # check the type of +1 element in element_molecule list: parenthesis, letter(s)
+                # check the type of +1 element in element_molecule list:
+                # parenthesis, letter(s)
                 if element_molecule[count + 1] == '(':
                     idx = self.find_rbrac(mol[count + 1:len(mol)])
-                    # replicate subunits multiplier times and save them in l for recursion
+                    # replicate subunits multiplier times and
+                    # save them in l for recursion
                     for i in range(int(element_molecule[count])):
                         l.append(mol[count + 2:count + idx + 1])
                     count += idx + 1
@@ -75,7 +80,7 @@ class Parser:
         str = str.replace('{', '(')
         str = str.replace('}', ')')
         return str
-    
+
     def interchange_braces(self, str):
         '''
         Interchange left and right parenthesis
@@ -93,7 +98,7 @@ class Parser:
         for idx, ch in enumerate(str):
             if ch == '(':
                 count += 1
-        for idx, ch in enumerate(str):    
+        for idx, ch in enumerate(str):
             position = self.find_nth(str, ')', count)
             return position
 
@@ -120,6 +125,7 @@ class MyTest(unittest.TestCase):
     def test_fremy_salt(self):
         p = Parser()
         self.assertEqual(p.parse_molecule(fremy_salt), {'K': 4, 'O': 14, 'N': 2, 'S': 4})
+
 
 if __name__ == '__main__':
     unittest.main()
