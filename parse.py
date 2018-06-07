@@ -37,11 +37,11 @@ class Parser:
                 if element_molecule[count + 1] == '(':
                     idx = self.find_rbrac(mol[count + 1:len(mol)])
                     # replicate subunits multiplier times and
-                    # save them in l for recursion
+                    # save them in subunits_tobe_parsed for recursion
                     for i in range(int(element_molecule[count])):
                         subunits_tobe_parsed.append(mol[count + 2:count + idx + 1])
                     count += idx + 1
-                    # recursively parse each element of l
+                    # recursively parse each element of subunits_tobe_parsed
                     for el in subunits_tobe_parsed:
                         el = self.interchange_braces(el)
                         # reverse chemical formula
