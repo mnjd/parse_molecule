@@ -10,7 +10,7 @@ class Parser:
 
     def parse_molecule(self, mol):
         '''
-        Chemical formula of molecules is parsed here
+        Main driver; parse chemical formula
         '''
         mol = self.replace_braces(mol)
         mol = self.interchange_braces(mol)
@@ -65,7 +65,7 @@ class Parser:
 
     def replace_braces(self, str):
         '''
-        Replace square and brackets with parenthesis
+        Replace square and curly brackets with parentheses
         '''
         str = str.replace('[', '(')
         str = str.replace(']', ')')
@@ -84,29 +84,16 @@ class Parser:
     
     def reverse_string(self, str):
         '''
-        Reverse a
+        Reverse a string
         '''
         return str[::-1]
 
     def find_elements_molecule(self, formula):
         '''
-        Given a chemical formula having atoms, multipliers and
-        parentheses, make a list of these elements using regex 
+        Given a chemical formula, make a list of atoms, 
+        multipliers and parentheses using regex 
         '''
         return re.findall(r"[a-z]*[A-Z]|['(']|[')']|\d+", formula)
-
-    def find_rmbrac(self, str):
-        '''
-        Find rightmost parenthesis after finding leftmost parenthesis
-        '''
-        count = 0
-        for idx, ch in enumerate(str):
-            if ch == '(':
-                count += 1
-        for idx, ch in enumerate(str):
-            position = self.find_nth(str, ')', count)
-            return position
-
 
     def find_rbrac(self, str):
         '''
