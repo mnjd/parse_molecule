@@ -20,7 +20,7 @@ python test.py
 ```
 
 # Some ideas behind this code
-The core idea is to use the reversed chemical formula. If normal formula is used, multipliers only appear after parsing subunits they apply to. Values of these multipliers if obtained before parsing subunits is very useful. This is acheivedby reversing the chemical formula. On top of this advantage, if a lowercase appear, one can immediately guess that following letter will be uppercase. With an unreversed formula, if an uppercase is encountered, the following can be either a lowercase, a number, a parenthesis.
+The first idea is to use the reversed chemical formula. If normal formula is used, multipliers only appear after parsing subunits they apply to. Values of these multipliers if obtained before parsing subunits is very useful. This is acheivedby reversing the chemical formula. On top of this advantage, if a lowercase appear, one can immediately guess that following letter will be uppercase. With an unreversed formula, if an uppercase is encountered, the following can be either a lowercase, a number, a parenthesis.
 
 The second idea is to replicate subunits that are inside parentheses as many times as the value of multipliers in front of them. At the end, we are left with subunits that have any parenthesis and so, they can be parsed easily.
 
