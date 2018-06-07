@@ -25,7 +25,7 @@ class Parser:
         # atoms, multipliers, parenthesis
         element_molecule = re.findall(r"[a-z]*[A-Z]|['(']|[')']|\d+", mol)
         count = 0
-        # lsubunits_tobe_parsed contains subunits of the molecule that have 
+        # lsubunits_tobe_parsed contains subunits of the molecule that have
         # to be parsed and is used at the begining of the recursion
         subunits_tobe_parsed = []
         while count < len(element_molecule):
@@ -39,7 +39,8 @@ class Parser:
                     # replicate subunits multiplier times and
                     # save them in subunits_tobe_parsed for recursion
                     for i in range(int(element_molecule[count])):
-                        subunits_tobe_parsed.append(mol[count + 2:count + idx + 1])
+                        subunits_tobe_parsed.append(
+                            mol[count + 2:count + idx + 1])
                     count += idx + 1
                     # recursively parse each element of subunits_tobe_parsed
                     for el in subunits_tobe_parsed:
@@ -50,8 +51,9 @@ class Parser:
                 elif element_molecule[count + 1].isalpha():
                     str = element_molecule[count + 1]
                     # update dictionary after reversing str
-                    self.result[str[::-1]] = self.result.get(str[::-1], 0) + \
-                                             int(element_molecule[count])
+                    self.result[str[::-1]] = self.result.get(
+                                             str[::-1], 0) + int(
+                                             element_molecule[count])
                     count += 2
                 ######################
                 #  TO DO //// TO DO  #
@@ -115,8 +117,9 @@ class Parser:
             n -= 1
         return start
 
+
 p = Parser()
-print(p.parse_molecule('K44(ONa)4SO3'))
+print(p.parse_molecule(fremy_salt))
 
 
 class MyTest(unittest.TestCase):
