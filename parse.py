@@ -19,6 +19,7 @@ class Parser:
         '''
         mol = self.replace_braces(mol)
         mol = self.interchange_braces(mol)
+        # reverse chemical formula
         mol = mol[::-1]
         # make a list with individual elements found in chemical formula:
         # atoms, multipliers, parenthesis
@@ -43,6 +44,7 @@ class Parser:
                     # recursively parse each element of l
                     for el in l:
                         el = self.interchange_braces(el)
+                        # reverse chemical formula
                         el = el[::-1]
                         self.parse_molecule(el)
                 elif element_molecule[count + 1].isalpha():
@@ -111,6 +113,9 @@ class Parser:
             start = str.find(pattern, start+len(pattern))
             n -= 1
         return start
+
+p = Parser()
+print(p.parse_molecule('K44(ONa)4SO3'))
 
 
 class MyTest(unittest.TestCase):
