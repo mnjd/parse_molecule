@@ -1,11 +1,6 @@
 import unittest
 import re
 
-water = 'H2O'
-magnesium_hydroxide = 'Mg(OH)2'
-fremy_salt = 'K4[ON(SO3)2]2'
-imaginary = 'ON(SO3)2'
-
 
 class Parser:
 
@@ -19,11 +14,8 @@ class Parser:
         '''
         mol = self.replace_braces(mol)
         mol = self.interchange_braces(mol)
-        # reverse chemical formula
-        mol = mol[::-1]
-        # make a list with individual elements found in chemical formula:
-        # atoms, multipliers, parenthesis
-        element_molecule = re.findall(r"[a-z]*[A-Z]|['(']|[')']|\d+", mol)
+        mol = self.reverse_string(mol)
+        element_molecule = self.find_elements_molecule(mol)
         count = 0
         # lsubunits_tobe_parsed contains subunits of the molecule that have
         # to be parsed and is used at the begining of the recursion
@@ -35,31 +27,31 @@ class Parser:
                 # check the type of +1 element in element_molecule list:
                 # parenthesis, letter(s)
                 if element_molecule[count + 1] == '(':
-                    idx = self.find_rbrac(mol[count + 1:len(mol)])
+                    idx = self.find_rbrac(''.join(element_molecule[count + 2:len(element_molecule)]))
+                    multiplier = element_molecule[count]
+                    multiplier = int(multiplier[::-1])
+                    # empty subunits_tobe_parsed to clear already parsed subunits
+                    subunits_tobe_parsed = []
                     # replicate subunits multiplier times and
                     # save them in subunits_tobe_parsed for recursion
-                    for i in range(int(element_molecule[count])):
+                    for _ in range(multiplier):
                         subunits_tobe_parsed.append(
-                            mol[count + 2:count + idx + 1])
+                            ''.join(element_molecule[count + 2:count + idx + 1]))
                     count += idx + 1
                     # recursively parse each element of subunits_tobe_parsed
                     for el in subunits_tobe_parsed:
                         el = self.interchange_braces(el)
                         # reverse chemical formula
-                        el = el[::-1]
+                        el = self.reverse_string(el)
                         self.parse_molecule(el)
                 elif element_molecule[count + 1].isalpha():
                     str = element_molecule[count + 1]
-                    # update dictionary after reversing str
+                    # update dictionary after reversing str and multiplier
+                    multiplier = element_molecule[count]
+                    multiplier = int(multiplier[::-1])
                     self.result[str[::-1]] = self.result.get(
-                                             str[::-1], 0) + int(
-                                             element_molecule[count])
+                                             str[::-1], 0) + multiplier
                     count += 2
-                ######################
-                #  TO DO //// TO DO  #
-                # work on else cases #
-                #  TO DO //// TO DO  #
-                ######################
                 else:
                     count += 1
             elif element_molecule[count].isalpha():
@@ -67,11 +59,6 @@ class Parser:
                 # update dictionary after reversing str
                 self.result[str[::-1]] = self.result.get(str[::-1], 0) + 1
                 count += 1
-            ######################
-            #  TO DO //// TO DO  #
-            # work on else cases #
-            #  TO DO //// TO DO  #
-            ######################
             else:
                 count += 1
         return self.result
@@ -94,8 +81,21 @@ class Parser:
         str = str.replace(')', '(')
         str = str.replace(']', ')')
         return str
+    
+    def reverse_string(self, str):
+        '''
+        Reverse a
+        '''
+        return str[::-1]
 
-    def find_rbrac(self, str):
+    def find_elements_molecule(self, formula):
+        '''
+        Given a chemical formula having atoms, multipliers and
+        parentheses, make a list of these elements using regex 
+        '''
+        return re.findall(r"[a-z]*[A-Z]|['(']|[')']|\d+", formula)
+
+    def find_rmbrac(self, str):
         '''
         Find rightmost parenthesis after finding leftmost parenthesis
         '''
@@ -107,6 +107,25 @@ class Parser:
             position = self.find_nth(str, ')', count)
             return position
 
+
+    def find_rbrac(self, str):
+        '''
+        Find rightmost parenthesis after finding leftmost parenthesis
+        in a string including inside nested parentheses if any
+        '''
+        element_str = self.find_elements_molecule(str)
+        count1 = 1
+        count2 = 0
+        count3 = 1
+        while count2 < count1:
+            if element_str[count3] == ')':
+                count2 += 1
+            elif element_str[count3] == '(':
+                count2 += -1
+            count3 += 1
+        return count3
+
+
     def find_nth(self, str, pattern, n):
         '''
         Find the nth occurrence of a pattern in string
@@ -117,26 +136,10 @@ class Parser:
             n -= 1
         return start
 
-
-p = Parser()
-print(p.parse_molecule(fremy_salt))
-
-
-class MyTest(unittest.TestCase):
-    def test_water(self):
-        p = Parser()
-        self.assertEqual(p.parse_molecule(water), {'H': 2, 'O': 1})
-
-    def test_magnesium_hydroxide(self):
-        p = Parser()
-        self.assertEqual(p.parse_molecule(magnesium_hydroxide),
-                         {'Mg': 1, 'O': 2, 'H': 2})
-
-    def test_fremy_salt(self):
-        p = Parser()
-        self.assertEqual(p.parse_molecule(fremy_salt), 
-                         {'K': 4, 'O': 14, 'N': 2, 'S': 4})
-
-
 if __name__ == '__main__':
-    unittest.main()
+    liste_formula = ['H2O', 'Mg(OH)2', 'K4[ON(SO3)2]2']
+    liste_name = ['water', 'magnesium_hydroxide', 'fremy_salt']
+    for index, formula in enumerate(liste_formula):
+        p = Parser()
+        print(liste_name[index], ': ', p.parse_molecule(formula))
+
