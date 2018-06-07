@@ -50,7 +50,8 @@ class Parser:
                 elif element_molecule[count + 1].isalpha():
                     str = element_molecule[count + 1]
                     # update dictionary after reversing str
-                    self.result[str[::-1]] = self.result.get(str[::-1], 0) + int(element_molecule[count])
+                    self.result[str[::-1]] = self.result.get(str[::-1], 0) + \
+                                             int(element_molecule[count])
                     count += 2
                 ######################
                 #  TO DO //// TO DO  #
@@ -125,11 +126,13 @@ class MyTest(unittest.TestCase):
 
     def test_magnesium_hydroxide(self):
         p = Parser()
-        self.assertEqual(p.parse_molecule(magnesium_hydroxide), {'Mg': 1, 'O': 2, 'H': 2})
+        self.assertEqual(p.parse_molecule(magnesium_hydroxide),
+                         {'Mg': 1, 'O': 2, 'H': 2})
 
     def test_fremy_salt(self):
         p = Parser()
-        self.assertEqual(p.parse_molecule(fremy_salt), {'K': 4, 'O': 14, 'N': 2, 'S': 4})
+        self.assertEqual(p.parse_molecule(fremy_salt), 
+                         {'K': 4, 'O': 14, 'N': 2, 'S': 4})
 
 
 if __name__ == '__main__':
