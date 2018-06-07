@@ -25,9 +25,9 @@ class Parser:
         # atoms, multipliers, parenthesis
         element_molecule = re.findall(r"[a-z]*[A-Z]|['(']|[')']|\d+", mol)
         count = 0
-        # l contains subunits of the molecule that have to be parsed and
-        # is used at the begining of the recursion
-        l = []
+        # lsubunits_tobe_parsed contains subunits of the molecule that have 
+        # to be parsed and is used at the begining of the recursion
+        subunits_tobe_parsed = []
         while count < len(element_molecule):
             # check the type of element in element_molecule list:
             # number(s), letter(s)
@@ -39,10 +39,10 @@ class Parser:
                     # replicate subunits multiplier times and
                     # save them in l for recursion
                     for i in range(int(element_molecule[count])):
-                        l.append(mol[count + 2:count + idx + 1])
+                        subunits_tobe_parsed.append(mol[count + 2:count + idx + 1])
                     count += idx + 1
                     # recursively parse each element of l
-                    for el in l:
+                    for el in subunits_tobe_parsed:
                         el = self.interchange_braces(el)
                         # reverse chemical formula
                         el = el[::-1]
